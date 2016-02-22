@@ -832,6 +832,118 @@ std::string Bombe(std::string sanatized_input) {
 }
 //*************************************************** End of Bombe ***********************************************************************\|
 
+//************************************************** Bome Short **************************************************************************\|
+//Essentially, bombe withought the plugboard
+
+string BombeShort(string sanatized_input){
+    string decryption_attempt = "";
+    //sanatize just to make sure
+    sanatized_input = sanatize(sanatized_input);
+    
+    //******ADD a loop to take user inputs for "keywords", add them to an array?
+    
+    cout << "Welcome to Bombe, I will begin my Attempt to Break your Message.\nWorking....." << endl;
+                                                          //Rotor 1\\
+//***************************************************************************************************************************************\|
+    for(int R1 = 0; R1 <= Number_of_Rotors; R1++){
+        rotor1 = Rotors[R1];
+                                                          //Rotor 2\\
+//***************************************************************************************************************************************\|
+        for(int R2 = 0; R2 <= Number_of_Rotors; R2++){
+            if(R2 != R1){
+                rotor2 = Rotors[R2];
+            }
+            else{
+                continue;
+            }
+                                                          //Rotor 3\\
+//***************************************************************************************************************************************\|
+        for(int R3 = 0; R3 <= Number_of_Rotors; R3++){
+            if(R3 != R1 && R3 != R2){
+                rotor3 = Rotors[R3];
+            }
+            else{
+                continue;
+            }
+            //********* End rotor Permutations, Continue with Plugboard and starting position *********\|
+            
+                                                            //Pair 1\\
+//***************************************************************************************************************************************\|
+            
+            //***************** End of Plugboard Permutations, continue with Rotor Start Locations *****************\|
+                            
+                                                            //Rotor 1 Start Location\\
+//***************************************************************************************************************************************\|
+            for(int r1start = 0; r1start <= 26; r1start++){
+                                rotor1_position = r1start;
+                                
+                                                            //Rotor 2 Start Location\\
+//***************************************************************************************************************************************\| 
+            for(int r2start = 0; r2start <= 26; r2start++){
+                rotor1_position = r2start;
+                                    
+                                                            //Rotor 3 Start Location\\
+//***************************************************************************************************************************************\|
+            for(int r3start = 0; r3start <= 26; r3start++){
+                rotor1_position = r3start;
+           
+            //***************** End of Rotor Start Location Permutations, continue with Mirror *****************\|                
+                                        
+                                                            //Mirror Permutation\\
+//***************************************************************************************************************************************\|   
+            for(int selected_mirror = 0; selected_mirror <= Mirror.length(); selected_mirror){
+                //assign a mirror from the mirrors array
+                mirror = Mirrors[selected_mirror];
+                
+            //***************** End of Mirror Permutation, continue with Final Configuration and decryption *****************\|
+            
+                //fill the plugboard "holes" with the normal letters- there should be 6 '*'s replaced
+                //fill_plugboard(); Dont need this if the plugboard is given
+                                        
+                //Now we can finally attempt a decryption
+                decryption_attempt = enigma(sanatized_input);
+                                        
+                //Now, using the possible words given in the keyword_array, we can check to see if any of
+                    //them are substrings of the decryption_attempt
+                for(int key_word = 0; key_word <= number_of_keywords - array_index_shift; key_word++){
+                    //If the keyword is a substring...
+                    if(decryption_attempt.find(keyword_array[key_word]) != string::npos){
+                        //Display the possible decryption to the user,
+                        cout << "A Possible Decryption of the Message is: \n" << format_to_enigma_standard(decryption_attempt) << endl;
+                        //If the user deems it makes sense
+                        cout << "\n Is this an Acceptable Decryption, or Shall I Keep Trying?[y/n]"
+                        char userin_pause_or_continue = '';
+                        cin >> userin_pause_or_continue;
+                        if(userin_pause_or_continue == 'y' || userin_pause_or_continue == 'Y'){
+                            //return this decryption to the main()
+                            return decryption_attempt;
+                        }
+                        else{
+                            //If the user deemed this match to be wrong, keep trying from where we left off
+                            
+                            //***** THIS RESET MAY NOT BE NEEDED******
+                            //Reset the values of the plugboard for the next decryption attempt
+                            //reset_plugboard(); dont touch the plugboard
+                            continue;
+                        }
+                    //else {
+                        //continue to the next combination}
+                    }                   
+                }
+                //Reset the values of the plugboard for the next decryption attempt
+                reset_plugboard();//dont touch the plugboard
+            }
+                               
+// Close the Rotor Start Location Permutations                                        
+}}}                                      
+// Close all of the Character Pair Permutations                           
+}}}
+//Close the Function
+    cout << "I am sorry, Dave. I am Unable to Crack this Message" << endl;
+    string failed = "failed to find a possible decryption";
+    return failed;
+}
+
 //Bombe Helper Functions\\
 //***************************************************************************************************************************************\|           
 //add the plugboard letter combo from Bombe to the array            
@@ -955,7 +1067,7 @@ do {
 		std::cin >> input;
 		std::string sanatized_input = "";
 		sanatized_input = sanatize(input);
-		std::cout << "The Chosen Message from Bombe Reads: " << Bombe(sanatized_input) << std::endl;
+		std::cout << "The Chosen Message from Bombe Reads: " << BombeShort(sanatized_input) << std::endl;
 		//Output the settings that worked? the should still be set
 		break;
 
