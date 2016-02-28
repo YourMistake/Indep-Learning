@@ -180,7 +180,7 @@ std::string enigma(std::string string_in) {
 		//Character We will work with in this iteration
 		char character = sanatized_input[string_iterator];
 		//Increment the Rotors First!\\
-				    //*****************************************************************************************************\\|
+	//*****************************************************************************************************\\|
 		rotor1_start++;
 		//check if rotor 2 needs to be turned
 		if (rotor1_start == rotor2_kick_value) {
@@ -235,9 +235,9 @@ std::string enigma(std::string string_in) {
 		//**************************Find the Equivalent on the Plugboard Down**********************************\\| 
 		character = Enc_Dec_plug_board[base_location];
 
-		//Rotor 1 Down\\
-				    //*****************************************************************************************************\\|             
-//get the position of the encypted character on rotor 1
+											//Rotor 1 Down\\
+	 //*****************************************************************************************************\\|             
+		//get the position of the encypted character on rotor 1
 		rotor1_position = base_location + rotor1_start;
 
 		//error check for bounds
@@ -266,8 +266,8 @@ std::string enigma(std::string string_in) {
 		//set the character for debugging purposes       
 		character = base[rotor1_position];
 
-		//Rotor 2 Down\\
-				    //*****************************************************************************************************\\|                                        
+											//Rotor 2 Down\\
+	//*****************************************************************************************************\\|                                        
 //Rinse and repeat of rotor 1, although the shift in the first rotor must be accounted for
 		rotor2_position = rotor1_position - rotor1_start + rotor2_start;
 
@@ -293,9 +293,9 @@ std::string enigma(std::string string_in) {
 		}
 
 		character = base[rotor2_position];
-		//Rotor 3 Down\\
-				    //*****************************************************************************************************\\|    
-//Rinse and repeat of Rotor 2 Down
+											//Rotor 3 Down\\
+	//*****************************************************************************************************\\|    
+		//Rinse and repeat of Rotor 2 Down
 		rotor3_position = rotor2_position - rotor2_start + rotor3_start;
 
 		if (rotor3_position < 0) {
@@ -320,9 +320,9 @@ std::string enigma(std::string string_in) {
 		}
 
 		character = base[rotor3_position];
-		//Mirror\\
-				    //*****************************************************************************************************\\|  
-//Simple ceasar shift- one to one translation to another character
+								  			//Mirror\\
+//*****************************************************************************************************\\|  
+		//Simple ceasar shift- one to one translation to another character
 		reflector_base_location = rotor3_position - rotor3_start;
 		character = mirror[reflector_base_location];
 
@@ -334,8 +334,8 @@ std::string enigma(std::string string_in) {
 		}
 		//commented for debugging, appears to work without it
 		//character = mirror[reflector_base_location];  
-		//Rotor 3 UP\\
-				    //*****************************************************************************************************\\|          
+											//Rotor 3 UP\\
+	//*****************************************************************************************************\\|          
 		rotor3_position = reflector_base_location + rotor3_start;
 		if (rotor3_position < 0) {
 			rotor3_position = alphabet_normal_length + rotor3_position;
@@ -355,8 +355,8 @@ std::string enigma(std::string string_in) {
 
 		character = rotor3[rotor3_position];
 		character = base[rotor3_position];
-		//Rotor 2 UP\\
-				    //*****************************************************************************************************\\| 
+										//Rotor 2 UP\\
+	 //*****************************************************************************************************\\| 
 		rotor2_position = rotor3_position - rotor3_start + rotor2_start;
 		if (rotor2_position < 0) {
 			rotor2_position = alphabet_normal_length + rotor2_position;
@@ -375,8 +375,8 @@ std::string enigma(std::string string_in) {
 
 		character = rotor2[rotor2_position];
 
-		//Rotor 1 UP\\
-				    //*****************************************************************************************************\\|
+											//Rotor 1 UP\\
+	//*****************************************************************************************************\\|
 		rotor1_position = rotor2_position - rotor2_start + rotor1_start;
 		if (rotor1_position < 0) {
 			rotor1_position = alphabet_normal_length + rotor1_position;
@@ -395,8 +395,8 @@ std::string enigma(std::string string_in) {
 
 		character = rotor1[rotor1_position];
 
-		//Plugboard UP\\
-				    //*****************************************************************************************************\\|       
+										//Plugboard UP\\
+	//*****************************************************************************************************\\|       
 		plug_board_location = rotor1_position - rotor1_start;
 
 		if (plug_board_location < 0) {
@@ -426,7 +426,7 @@ std::string enigma(std::string string_in) {
 		rotor3_position = 0;
 	}
 	//Format the output in the German 5 character block Style, define a return string
-	/*std::string return_string = "";
+	std::string return_string = "";
 	for (int i = 0; i < output.length(); i++) {
 		if (i % 5 == 0 && i != 0) {
 			return_string = return_string + " ";
@@ -434,8 +434,8 @@ std::string enigma(std::string string_in) {
 		return_string = return_string + output[i];
 	}
 	//reset the output string and return the encryption
-	output = "";*/
-	return output;// return_string;
+	output = "";
+	return return_string;// return_string;
 }
 
 std::string format_to_enigma_standard(std::string input_string) {
@@ -486,346 +486,288 @@ std::string Bombe(std::string sanatized_input) {
 	//******ADD a loop to take user inputs for "keywords", add them to an array?
 
 	std::cout << "Welcome to Bombe, I will begin my Attempt to Break your Message.\nWorking....." << std::endl;
-	//Rotor 1\\
-		//***************************************************************************************************************************************\|
+													//Rotor 1\\
+	//***************************************************************************************************************************************\|
 	for (int R1 = 0; R1 <= Number_of_Rotors; R1++) {
 		rotor1 = I; //&Rotors[R1];
 		std::cout << "The Current Rotor in Position 1 is: " << rotor1 << std::endl;
-		//Rotor 2\\
-				//***************************************************************************************************************************************\|
-		for (int R2 = 0; R2 <= Number_of_Rotors; R2++) {
-			if (R2 != R1) {
-				rotor2 = II;//&Rotors[R2];
-				std::cout << "The Current Rotor in Position 2 is: " << rotor2 << std::endl;
-			}
-			else {
-				continue;
-			}
-			//Rotor 3\\
-						//***************************************************************************************************************************************\|
-			for (int R3 = 0; R3 <= Number_of_Rotors; R3++) {
-				if (R3 != R1 && R3 != R2) {
-					rotor3 = III; // &Rotors[R3];
-					std::cout << "The Current Rotor in Position 3 is: " << rotor3 << std::endl;
-				}
-				else {
-					continue;
-				}
+													//Rotor 2\\
+	//***************************************************************************************************************************************\|
+	for (int R2 = 0; R2 <= Number_of_Rotors; R2++) {
+		if (R2 != R1) {
+			rotor2 = II;//&Rotors[R2];
+			std::cout << "The Current Rotor in Position 2 is: " << rotor2 << std::endl;
+		}
+		else {
+			continue;
+		}
+													//Rotor 3\\
+	//***************************************************************************************************************************************\|
+	for (int R3 = 0; R3 <= Number_of_Rotors; R3++) {
+		if (R3 != R1 && R3 != R2) {
+			rotor3 = III; // &Rotors[R3];
+			std::cout << "The Current Rotor in Position 3 is: " << rotor3 << std::endl;
+		}
+		else {
+			continue;
+		}
 				//********* End rotor Permutations, Continue with Plugboard and starting position *********\|
 
-				//Pair 1\\
-								//***************************************************************************************************************************************\|
-				for (int pair11 = 0; pair11 <= 26; pair11) {
-					for (int pair12 = 0; pair12 <= 26; pair12) {
-						if (pair12 == pair11) {
-							continue;
-						}
-						else {
-							add_to_plugboard(pair11, pair12);
-
-							//Pair 2\\
-														//***************************************************************************************************************************************\|
-							for (int pair21 = 0; pair21 <= 26; pair21) {
-								//make sure the selected value is not already used
-								if (pair21 == pair11 || pair21 == pair12) {
-									continue;
-								}
-								else {
-									//now to select the corresponding letter for pair 2
-									for (int pair22 = 0; pair22 <= 26; pair22) {
-										if (pair22 == pair11 || pair22 == pair12 || pair22 == pair21) {
-											continue;
-										}
-										else {
-											add_to_plugboard(pair21, pair22);
-
-											//Pair 3\\
-																						//***************************************************************************************************************************************\|
-											for (int pair31 = 0; pair31 <= 26; pair31) {
-												//make sure the selected value is not already used
-												if (pair31 == pair11 || pair31 == pair12 || pair31 == pair21 || pair31 == pair22) {
-													continue;
-												}
-												else {
-													//now to select the corresponding letter for pair 3
-													for (int pair32 = 0; pair32 <= 26; pair32) {
-														if (pair32 == pair11 || pair32 == pair12 || pair32 == pair21 || pair32 == pair22 || pair32 == pair31) {
-															continue;
-														}
-														else {
-															add_to_plugboard(pair31, pair32);
-
-															//Pair 4\\
-																														//***************************************************************************************************************************************\|
-															for (int pair41 = 0; pair41 <= 26; pair41) {
-																//make sure the selected value is not already used
-																if (pair41 == pair11 || pair41 == pair12 || pair41 == pair21 ||
-																	pair41 == pair22 || pair41 == pair31 || pair41 == pair32)
-																{
-																	continue;
-																}
-																else {
-																	//now to select the corresponding letter for pair 4
-																	for (int pair42 = 0; pair42 <= 26; pair42) {
-																		if (pair42 == pair11 || pair42 == pair12 || pair42 == pair21 || pair42 == pair22 ||
-																			pair42 == pair31 || pair42 == pair32 || pair42 == pair41)
-																		{
-																			continue;
-																		}
-																		else {
-																			add_to_plugboard(pair41, pair42);
-
-																			//Pair 5\\
-																																						//***************************************************************************************************************************************\|
-																			for (int pair51 = 0; pair51 <= 26; pair51) {
-																				//make sure the selected value is not already used
-																				if (pair51 == pair11 || pair51 == pair12 || pair51 == pair21 || pair51 == pair22 ||
-																					pair51 == pair31 || pair51 == pair32 || pair51 == pair41 || pair51 == pair42)
-																				{
-																					continue;
-																				}
-																				else {
-																					//now to select the corresponding letter for pair 5
-																					for (int pair52 = 0; pair52 <= 26; pair52) {
-																						if (pair52 == pair11 || pair52 == pair12 || pair52 == pair21 || pair52 == pair22 ||
-																							pair52 == pair31 || pair52 == pair32 || pair52 == pair41 || pair52 == pair42 || pair52 == pair51)
-																						{
-																							continue;
-																						}
-																						else {
-																							add_to_plugboard(pair51, pair52);
-
-																							//Pair 6\\
-																																														//***************************************************************************************************************************************\|
-																							for (int pair61 = 0; pair61 <= 26; pair61) {
-																								//make sure the selected value is not already used
-																								if (pair61 == pair11 || pair61 == pair12 || pair61 == pair21 || pair61 == pair22 ||
-																									pair61 == pair31 || pair61 == pair32 || pair61 == pair41 || pair61 == pair42 ||
-																									pair61 == pair51 || pair61 == pair52)
-																								{
-																									continue;
-																								}
-																								else {
-																									//now to select the corresponding letter for pair 6
-																									for (int pair62 = 0; pair62 <= 26; pair62) {
-																										if (pair62 == pair11 || pair62 == pair12 || pair62 == pair21 || pair62 == pair22 ||
-																											pair62 == pair31 || pair62 == pair32 || pair62 == pair41 || pair62 == pair42 ||
-																											pair62 == pair51 || pair62 == pair52 || pair62 == pair61)
-																										{
-																											continue;
-																										}
-																										else {
-																											add_to_plugboard(pair61, pair62);
-
-																											//Pair 7\\
-																																																						//***************************************************************************************************************************************\|                            
-																											for (int pair71 = 0; pair71 <= 26; pair71) {
-																												//make sure the selected value is not already used
-																												if (pair71 == pair11 || pair71 == pair12 || pair71 == pair21 || pair71 == pair22 ||
-																													pair71 == pair31 || pair71 == pair32 || pair71 == pair41 || pair71 == pair42 ||
-																													pair71 == pair51 || pair71 == pair52 || pair71 == pair61 || pair71 == pair62)
-																												{
-																													continue;
-																												}
-																												else {
-																													//now to select the corresponding letter for pair 7
-																													for (int pair72 = 0; pair72 <= 26; pair72) {
-																														if (pair72 == pair11 || pair72 == pair12 || pair72 == pair21 || pair72 == pair22 ||
-																															pair72 == pair31 || pair72 == pair32 || pair72 == pair41 || pair72 == pair42 ||
-																															pair72 == pair51 || pair72 == pair52 || pair72 == pair61 || pair72 == pair62 ||
-																															pair72 == pair71)
-																														{
-																															continue;
-																														}
-																														else {
-																															add_to_plugboard(pair71, pair72);
-
-																															//Pair 8\\
-																																																														//***************************************************************************************************************************************\|
-																															for (int pair81 = 0; pair81 <= 26; pair81) {
-																																//make sure the selected value is not already used
-																																if (pair81 == pair11 || pair81 == pair12 || pair81 == pair21 || pair81 == pair22 ||
-																																	pair81 == pair31 || pair81 == pair32 || pair81 == pair41 || pair81 == pair42 ||
-																																	pair81 == pair51 || pair81 == pair52 || pair81 == pair61 || pair81 == pair62 ||
-																																	pair81 == pair71 || pair81 == pair72)
-																																{
-																																	continue;
-																																}
-																																else {
-																																	//now to select the corresponding letter for pair 8
-																																	for (int pair82 = 0; pair82 <= 26; pair82) {
-																																		if (pair82 == pair11 || pair82 == pair12 || pair82 == pair21 || pair82 == pair22 ||
-																																			pair82 == pair31 || pair82 == pair32 || pair82 == pair41 || pair82 == pair42 ||
-																																			pair82 == pair51 || pair82 == pair52 || pair82 == pair61 || pair82 == pair62 ||
-																																			pair82 == pair71 || pair82 == pair72 || pair82 == pair81)
-																																		{
-																																			continue;
-																																		}
-																																		else {
-																																			add_to_plugboard(pair81, pair82);
-
-																																			//Pair 9\\
-																																																																						//***************************************************************************************************************************************\|
-																																			for (int pair91 = 0; pair91 <= 26; pair91) {
-																																				//make sure the selected value is not already used
-																																				if (pair91 == pair11 || pair91 == pair12 || pair91 == pair21 || pair91 == pair22 ||
-																																					pair91 == pair31 || pair91 == pair32 || pair91 == pair41 || pair91 == pair42 ||
-																																					pair91 == pair51 || pair91 == pair52 || pair91 == pair61 || pair91 == pair62 ||
-																																					pair91 == pair71 || pair91 == pair72 || pair91 == pair81 || pair91 == pair82)
-																																				{
-																																					continue;
-																																				}
-																																				else {
-																																					//now to select the corresponding letter for pair 9
-																																					for (int pair92 = 0; pair92 <= 26; pair92) {
-																																						if (pair92 == pair11 || pair92 == pair12 || pair92 == pair21 || pair92 == pair22 ||
-																																							pair92 == pair31 || pair92 == pair32 || pair92 == pair41 || pair92 == pair42 ||
-																																							pair92 == pair51 || pair92 == pair52 || pair92 == pair61 || pair92 == pair62 ||
-																																							pair92 == pair71 || pair92 == pair72 || pair92 == pair81 || pair92 == pair82 ||
-																																							pair92 == pair91)
-																																						{
-																																							continue;
-																																						}
-																																						else {
-																																							add_to_plugboard(pair91, pair92);
-
-																																							//Pair 10\\
-																																																																														//***************************************************************************************************************************************\|
-																																							for (int pair101 = 0; pair101 <= 26; pair101) {
-																																								//make sure the selected value is not already used
-																																								if (pair101 == pair11 || pair101 == pair12 || pair101 == pair21 || pair101 == pair22 ||
-																																									pair101 == pair31 || pair101 == pair32 || pair101 == pair41 || pair101 == pair42 ||
-																																									pair101 == pair51 || pair101 == pair52 || pair101 == pair61 || pair101 == pair62 ||
-																																									pair101 == pair71 || pair101 == pair72 || pair101 == pair81 || pair101 == pair82 ||
-																																									pair101 == pair91 || pair101 == pair92)
-																																								{
-																																									continue;
-																																								}
-																																								else {
-																																									//now to select the corresponding letter for pair 10
-																																									for (int pair102 = 0; pair102 <= 26; pair102) {
-																																										if (pair102 == pair11 || pair102 == pair12 || pair102 == pair21 || pair102 == pair22 ||
-																																											pair102 == pair31 || pair102 == pair32 || pair102 == pair41 || pair102 == pair42 ||
-																																											pair102 == pair51 || pair102 == pair52 || pair102 == pair61 || pair102 == pair62 ||
-																																											pair102 == pair71 || pair102 == pair72 || pair102 == pair81 || pair102 == pair82 ||
-																																											pair102 == pair91 || pair102 == pair92 || pair102 == pair101)
-																																										{
-																																											continue;
-																																										}
-																																										else {
-																																											add_to_plugboard(pair101, pair102);
-																																											//***************** End of Plugboard Permutations, continue with Rotor Start Locations *****************\|
-
-																																											//Rotor 1 Start Location\\
-																																																																																						//***************************************************************************************************************************************\|
-																																											for (int r1start = 0; r1start <= 26; r1start++) {
-																																												rotor1_position = r1start;
-
-																																												//Rotor 2 Start Location\\
-																																																																																								//***************************************************************************************************************************************\| 
-																																												for (int r2start = 0; r2start <= 26; r2start++) {
-																																													rotor1_position = r2start;
-
-																																													//Rotor 3 Start Location\\
-																																																																																										//***************************************************************************************************************************************\|
-																																													for (int r3start = 0; r3start <= 26; r3start++) {
-																																														rotor1_position = r3start;
-
-																																														//***************** End of Rotor Start Location Permutations, continue with Mirror *****************\|                
-
-																																														//Mirror Permutation\\
-																																																																																												//***************************************************************************************************************************************\|   
-																																														for (int selected_mirror = 0; selected_mirror <= 2; selected_mirror) { //Mirrors.length() = 3, therefore 2
-																																																															   //assign a mirror from the mirrors array
-																																															mirror = &Mirrors[selected_mirror];
-
-																																															//***************** End of Mirror Permutation, continue with Final Configuration and decryption *****************\|
-
-																																															//fill the plugboard "holes" with the normal letters- there should be 6 '*' replaced
-																																															fill_plugboard();
-
-																																															//Now we can finally attempt a decryption
-																																															decryption_attempt = enigma(sanatized_input);
-																																															std::cout << decryption_attempt << std::endl;
-																																															//Now, using the possible words given in the keyword_array, we can check to see if any of
-																																															//them are substrings of the decryption_attempt
-																																															for (int key_word = 0; key_word <= number_of_keywords - array_index_shift; key_word++) {
-																																																//If the keyword is a substring...
-																																																if (decryption_attempt.find(keyword_array[key_word]) != std::string::npos) {
-																																																	//Display the possible decryption to the user,
-																																																	std::cout << "A Possible Decryption of the Message is: \n" << format_to_enigma_standard(decryption_attempt) << std::endl;
-																																																	//If the user deems it makes sense
-																																																	std::cout << "\n Is this an Acceptable Decryption, or Shall I Keep Trying?[y/n] ";
-																																																	char userin_pause_or_continue;
-																																																	std::cin >> userin_pause_or_continue;
-																																																	if (userin_pause_or_continue == 'y' || userin_pause_or_continue == 'Y') {
-																																																		//return this decryption to the main()
-																																																		return decryption_attempt;
-																																																	}
-																																																	else {
-																																																		//If the user deemed this match to be wrong, keep trying from where we left off
-
-																																																		//***** THIS RESET MAY NOT BE NEEDED******
-																																																		//Reset the values of the plugboard for the next decryption attempt
-																																																		reset_plugboard();
-																																																		continue;
-																																																	}
-																																																	//else {
-																																																	//continue to the next combination}
-																																																}
-																																															}
-																																															//Reset the values of the plugboard for the next decryption attempt
-																																															reset_plugboard();
-																																														}
-
-																																														// Close the Rotor Start Location Permutations                                        
-																																													}
-																																												}
-																																											}
-																																											// Close all of the Character Pair Permutations                           
-																																										}
-																																									}
-																																								}
-																																							}
-																																						}
-																																					}
-																																				}
-																																			}
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+		//Begin Pair Permutations
+	//***************************************************************************************************************************************\|
+														//Pair 1\\
+		//***************************************************************************************************************************************\|
+		for (int pair11 = 0; pair11 <= 26; pair11) {
+			for (int pair12 = 0; pair12 <= 26; pair12) {
+				if (pair12 == pair11) {
+					continue;
 				}
-				//Close the Rotor Combination Permutations
+				else {
+					add_to_plugboard(pair11, pair12);
+
+														//Pair 2\\
+		//***************************************************************************************************************************************\|
+		for (int pair21 = 0; pair21 <= 26; pair21) {
+			//make sure the selected value is not already used
+			if (pair21 == pair11 || pair21 == pair12) {
+				continue;
 			}
+			else {
+			//now to select the corresponding letter for pair 2
+				for (int pair22 = 0; pair22 <= 26; pair22) {
+					if (pair22 == pair11 || pair22 == pair12 || pair22 == pair21) {
+						continue;
+					}
+					else {
+						add_to_plugboard(pair21, pair22);
+						
+														//Pair 3\\
+		//***************************************************************************************************************************************\|
+		for (int pair31 = 0; pair31 <= 26; pair31) {
+			//make sure the selected value is not already used
+			if (pair31 == pair11 || pair31 == pair12 || pair31 == pair21 || pair31 == pair22) {
+				continue;
+			}
+			else {
+			//now to select the corresponding letter for pair 3
+				for (int pair32 = 0; pair32 <= 26; pair32) {
+					if (pair32 == pair11 || pair32 == pair12 || pair32 == pair21 || pair32 == pair22 || pair32 == pair31) {
+						continue;
+					}
+					else {
+						add_to_plugboard(pair31, pair32);
+
+														//Pair 4\\
+		//***************************************************************************************************************************************\|
+		for (int pair41 = 0; pair41 <= 26; pair41) {
+			//make sure the selected value is not already used
+			if (pair41 == pair11 || pair41 == pair12 || pair41 == pair21 ||
+				pair41 == pair22 || pair41 == pair31 || pair41 == pair32){
+					continue;
+			}
+			else {
+				//now to select the corresponding letter for pair 4
+				for (int pair42 = 0; pair42 <= 26; pair42) {
+					if (pair42 == pair11 || pair42 == pair12 || pair42 == pair21 || pair42 == pair22 ||
+						pair42 == pair31 || pair42 == pair32 || pair42 == pair41){
+						continue;
+					}
+					else {
+						add_to_plugboard(pair41, pair42);
+
+														//Pair 5\\
+		//***************************************************************************************************************************************\|
+		for (int pair51 = 0; pair51 <= 26; pair51) {
+			//make sure the selected value is not already used
+			if (pair51 == pair11 || pair51 == pair12 || pair51 == pair21 || pair51 == pair22 ||
+				pair51 == pair31 || pair51 == pair32 || pair51 == pair41 || pair51 == pair42){
+				continue;
+			}
+			else {
+				//now to select the corresponding letter for pair 5
+				for (int pair52 = 0; pair52 <= 26; pair52) {
+					if (pair52 == pair11 || pair52 == pair12 || pair52 == pair21 || pair52 == pair22 ||
+						pair52 == pair31 || pair52 == pair32 || pair52 == pair41 || pair52 == pair42 || pair52 == pair51){ 																					
+						continue;
+					}
+					else {
+						add_to_plugboard(pair51, pair52);
+
+														//Pair 6\\
+		//***************************************************************************************************************************************\|
+		for (int pair61 = 0; pair61 <= 26; pair61) {
+			//make sure the selected value is not already used
+			if (pair61 == pair11 || pair61 == pair12 || pair61 == pair21 || pair61 == pair22 ||
+				pair61 == pair31 || pair61 == pair32 || pair61 == pair41 || pair61 == pair42 ||
+				pair61 == pair51 || pair61 == pair52){
+				continue;
+			}
+			else {
+				//now to select the corresponding letter for pair 6
+				for (int pair62 = 0; pair62 <= 26; pair62) {
+					if (pair62 == pair11 || pair62 == pair12 || pair62 == pair21 || pair62 == pair22 ||
+						pair62 == pair31 || pair62 == pair32 || pair62 == pair41 || pair62 == pair42 ||
+						pair62 == pair51 || pair62 == pair52 || pair62 == pair61){
+						continue;
+					}
+					else {
+						add_to_plugboard(pair61, pair62);
+							
+														//Pair 7\\
+		//***************************************************************************************************************************************\|                            
+		for (int pair71 = 0; pair71 <= 26; pair71) {
+			//make sure the selected value is not already used
+			if (pair71 == pair11 || pair71 == pair12 || pair71 == pair21 || pair71 == pair22 ||
+				pair71 == pair31 || pair71 == pair32 || pair71 == pair41 || pair71 == pair42 ||
+				pair71 == pair51 || pair71 == pair52 || pair71 == pair61 || pair71 == pair62){
+				continue;
+			}
+			else {
+				//now to select the corresponding letter for pair 7
+				for (int pair72 = 0; pair72 <= 26; pair72) {
+					if (pair72 == pair11 || pair72 == pair12 || pair72 == pair21 || pair72 == pair22 ||
+						pair72 == pair31 || pair72 == pair32 || pair72 == pair41 || pair72 == pair42 ||
+						pair72 == pair51 || pair72 == pair52 || pair72 == pair61 || pair72 == pair62 ||
+						pair72 == pair71){
+						continue;
+					}
+					else {
+						add_to_plugboard(pair71, pair72);
+
+														//Pair 8\\
+		//***************************************************************************************************************************************\|
+		for (int pair81 = 0; pair81 <= 26; pair81) {
+			//make sure the selected value is not already used
+			if (pair81 == pair11 || pair81 == pair12 || pair81 == pair21 || pair81 == pair22 ||
+				pair81 == pair31 || pair81 == pair32 || pair81 == pair41 || pair81 == pair42 ||
+				pair81 == pair51 || pair81 == pair52 || pair81 == pair61 || pair81 == pair62 ||
+				pair81 == pair71 || pair81 == pair72){
+				continue;
+			}
+			else {
+				//now to select the corresponding letter for pair 8
+				for (int pair82 = 0; pair82 <= 26; pair82) {
+					if (pair82 == pair11 || pair82 == pair12 || pair82 == pair21 || pair82 == pair22 ||
+						pair82 == pair31 || pair82 == pair32 || pair82 == pair41 || pair82 == pair42 ||
+						pair82 == pair51 || pair82 == pair52 || pair82 == pair61 || pair82 == pair62 ||
+						pair82 == pair71 || pair82 == pair72 || pair82 == pair81){
+						continue;
+					}
+					else {
+						add_to_plugboard(pair81, pair82);
+
+														//Pair 9\\
+		//***************************************************************************************************************************************\|
+		for (int pair91 = 0; pair91 <= 26; pair91) {
+			//make sure the selected value is not already used
+			if (pair91 == pair11 || pair91 == pair12 || pair91 == pair21 || pair91 == pair22 ||
+				pair91 == pair31 || pair91 == pair32 || pair91 == pair41 || pair91 == pair42 ||
+				pair91 == pair51 || pair91 == pair52 || pair91 == pair61 || pair91 == pair62 ||
+				pair91 == pair71 || pair91 == pair72 || pair91 == pair81 || pair91 == pair82){
+				continue;
+			}
+			else {
+				//now to select the corresponding letter for pair 9
+				for (int pair92 = 0; pair92 <= 26; pair92) {
+					if (pair92 == pair11 || pair92 == pair12 || pair92 == pair21 || pair92 == pair22 ||
+						pair92 == pair31 || pair92 == pair32 || pair92 == pair41 || pair92 == pair42 ||
+						pair92 == pair51 || pair92 == pair52 || pair92 == pair61 || pair92 == pair62 ||
+						pair92 == pair71 || pair92 == pair72 || pair92 == pair81 || pair92 == pair82 ||
+						pair92 == pair91){
+						continue;
+					}
+					else {
+						add_to_plugboard(pair91, pair92);
+
+														//Pair 10\\
+		//***************************************************************************************************************************************\|
+		for (int pair101 = 0; pair101 <= 26; pair101) {
+			//make sure the selected value is not already used
+			if (pair101 == pair11 || pair101 == pair12 || pair101 == pair21 || pair101 == pair22 ||
+				pair101 == pair31 || pair101 == pair32 || pair101 == pair41 || pair101 == pair42 ||
+				pair101 == pair51 || pair101 == pair52 || pair101 == pair61 || pair101 == pair62 ||
+				pair101 == pair71 || pair101 == pair72 || pair101 == pair81 || pair101 == pair82 ||
+				pair101 == pair91 || pair101 == pair92){
+				continue;
+			}
+			else {
+				//now to select the corresponding letter for pair 10
+				for (int pair102 = 0; pair102 <= 26; pair102) {
+					if (pair102 == pair11 || pair102 == pair12 || pair102 == pair21 || pair102 == pair22 ||
+						pair102 == pair31 || pair102 == pair32 || pair102 == pair41 || pair102 == pair42 ||
+						pair102 == pair51 || pair102 == pair52 || pair102 == pair61 || pair102 == pair62 ||
+						pair102 == pair71 || pair102 == pair72 || pair102 == pair81 || pair102 == pair82 ||
+						pair102 == pair91 || pair102 == pair92 || pair102 == pair101){
+						continue;
+					}
+					else {
+						add_to_plugboard(pair101, pair102);
+			//***************** End of Plugboard Permutations, continue with Rotor Start Locations *****************\|
+
+												//Rotor 1 Start Location\\
+		//***************************************************************************************************************************************\|
+		for (int r1start = 0; r1start <= 26; r1start++) {
+			rotor1_position = r1start;
+				
+												//Rotor 2 Start Location\\
+		//***************************************************************************************************************************************\| 
+		for (int r2start = 0; r2start <= 26; r2start++) {
+			rotor2_position = r2start;
+
+												//Rotor 3 Start Location\\
+		//***************************************************************************************************************************************\|
+		for (int r3start = 0; r3start <= 26; r3start++) {
+			rotor3_position = r3start;				
+			//***************** End of Rotor Start Location Permutations, continue with Mirror *****************\|                
+
+
+		//Mirror Permutation\\
+	//***************************************************************************************************************************************\|   
+		for (int selected_mirror = 0; selected_mirror <= 2; selected_mirror) { //Mirrors.length() = 3, therefore 2
+		   //assign a mirror from the mirrors array
+			mirror = &Mirrors[selected_mirror];
+			//***************** End of Mirror Permutation, continue with Final Configuration and decryption *****************\|
+
+					//fill the plugboard "holes" with the normal letters- there should be 6 '*' replaced
+			fill_plugboard();
+				//Now we can finally attempt a decryption
+			decryption_attempt = enigma(sanatized_input);
+			std::cout << decryption_attempt << std::endl;
+			//Now, using the possible words given in the keyword_array, we can check to see if any of
+			//them are substrings of the decryption_attempt
+			for (int key_word = 0; key_word <= number_of_keywords - array_index_shift; key_word++) {
+				//If the keyword is a substring...
+				if (decryption_attempt.find(keyword_array[key_word]) != std::string::npos) {
+					//Display the possible decryption to the user,
+					std::cout << "A Possible Decryption of the Message is: \n" << format_to_enigma_standard(decryption_attempt) << std::endl;
+					//If the user deems it makes sense
+					std::cout << "\n Is this an Acceptable Decryption, or Shall I Keep Trying?[y/n] ";
+					char userin_pause_or_continue;
+					std::cin >> userin_pause_or_continue;
+					if (userin_pause_or_continue == 'y' || userin_pause_or_continue == 'Y') {
+						//return this decryption to the main()
+						return decryption_attempt;
+					}
+					else {
+						//If the user deemed this match to be wrong, keep trying from where we left off
+						//***** THIS RESET MAY NOT BE NEEDED******
+						//Reset the values of the plugboard for the next decryption attempt
+						reset_plugboard();
+						continue;
+					}
+					//else {
+						//continue to the next combination}
+				}
+			}
+			//Reset the values of the plugboard for the next decryption attempt
+			reset_plugboard();
 		}
-	}
+		// Close the Rotor Start Location Permutations                                        
+		}}}
+	// Close all of the Character Pair Permutations                           
+	}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+	//Close the Rotor Combination Permutations
+	}}}
 	//Close the Function
 	std::cout << "I am sorry, Dave. I am Unable to Crack this Message" << std::endl;
 	std::string failed = "failed to find a possible decryption";
@@ -845,11 +787,11 @@ std::string BombeShort(std::string sanatized_input) {
 	//******ADD a loop to take user inputs for "keywords", add them to an array?
 
 	std::cout << "Welcome to Bombe, I will begin my Attempt to Break your Message.\nWorking....." << std::endl;
-	//Rotor 1\\
+													//Rotor 1\\
 	//***************************************************************************************************************************************\|
 	for (int R1 = 0; R1 <= Number_of_Rotors; R1++) {
 		rotor1 = I;//Rotors[R1];
-		//Rotor 2\\
+													//Rotor 2\\
 		//***************************************************************************************************************************************\|
 		for (int R2 = 0; R2 <= Number_of_Rotors; R2++) {
 			if (R2 != R1) {
@@ -858,104 +800,94 @@ std::string BombeShort(std::string sanatized_input) {
 			else {
 				continue;
 			}
-			//Rotor 3\\
-			//***************************************************************************************************************************************\|
-			for (int R3 = 0; R3 <= Number_of_Rotors; R3++) {
-				if (R3 != R1 && R3 != R2) {
-					rotor3 = III;//Rotors[R3];
-				}
-				else {
-					continue;
-				}
-				//********* End rotor Permutations, Continue with Plugboard and starting position *********\|
-
-				//Pair 1\\
-				//***************************************************************************************************************************************\|
-
-//***************** End of Plugboard Permutations, continue with Rotor Start Locations *****************\|
-
-//Rotor 1 Start Location\\
-//***************************************************************************************************************************************\|
-				for (int r1start = 0; r1start <= 26; r1start++) {
-					rotor1_position = r1start;
-
-					//Rotor 2 Start Location\\
-					//***************************************************************************************************************************************\| 
-					for (int r2start = 0; r2start <= 26; r2start++) {
-						rotor1_position = r2start;
-
-						//Rotor 3 Start Location\\
-						//***************************************************************************************************************************************\|
-						for (int r3start = 0; r3start <= 26; r3start++) {
-							rotor1_position = r3start;
-
-							//***************** End of Rotor Start Location Permutations, continue with Mirror *****************\|                
-
-							//Mirror Permutation\\
-							//***************************************************************************************************************************************\|   
-							for (int selected_mirror = 0; selected_mirror <= 25; selected_mirror++) {//Mirrors.length()
-								//assign a mirror from the mirrors array
-								mirror = mirrorA; //Mirrors[selected_mirror];
-
-								//***************** End of Mirror Permutation, continue with Final Configuration and decryption *****************\|
-
-								//fill the plugboard "holes" with the normal letters- there should be 6 '*'s replaced
-								//fill_plugboard(); Dont need this if the plugboard is given
-
-								//Now we can finally attempt a decryption
-								decryption_attempt = enigma(sanatized_input);
-								
-								if (hold == 0) {
-									std::cout << decryption_attempt << std::endl;
-									hold = 1;
-								}
-								
-								//Now, using the possible words given in the keyword_array, we can check to see if any of
-								//them are substrings of the decryption_attempt
-								for (int key_word = 0; key_word <= number_of_keywords - array_index_shift; key_word++) {
-									//If the keyword is a substring...
-									if (decryption_attempt.find(keyword_array[key_word]) != std::string::npos) {
-										//Display the possible decryption to the user,
-										std::cout << "A Possible Decryption of the Message is: \n" << decryption_attempt << std::endl;
-										//If the user deems it makes sense
-										std::cout << "\n Is this an Acceptable Decryption, or Shall I Keep Trying?[y/n] ";
-										char userin_pause_or_continue = ' ';
-										std::cin >> userin_pause_or_continue;
-										if (userin_pause_or_continue == 'y' || userin_pause_or_continue == 'Y') {
-											//return this decryption to the main()
-											return decryption_attempt;
-										}
-										else {
-											//If the user deemed this match to be wrong, keep trying from where we left off
-
-											//***** THIS RESET MAY NOT BE NEEDED******
-											//Reset the values of the plugboard for the next decryption attempt
-											//reset_plugboard(); dont touch the plugboard
-											continue;
-										}
-										//else {
-										//continue to the next combination}
-									}
-								}
-								//Reset the values of the plugboard for the next decryption attempt
-								reset_plugboard();//dont touch the plugboard
-							}
-
-							// Close the Rotor Start Location Permutations                                        
-						}
-					}
-				}
-				// Close all of the Character Pair Permutations                           
+													//Rotor 3\\
+		//***************************************************************************************************************************************\|
+		for (int R3 = 0; R3 <= Number_of_Rotors; R3++) {
+			if (R3 != R1 && R3 != R2) {
+				rotor3 = III;//Rotors[R3];
 			}
+			else {
+				continue;
+			}
+			//********* End rotor Permutations, Continue with Plugboard and starting position *********\|
+
+	//***************** No Plugboard Permutation in the Short Bombe to Make it Easier *****************\|
+
+												//Rotor 1 Start Location\\
+	//***************************************************************************************************************************************\|
+		for (int r1start = 0; r1start <= 26; r1start++) {
+			rotor1_position = r1start;
+
+												//Rotor 2 Start Location\\
+	//***************************************************************************************************************************************\| 
+		for (int r2start = 0; r2start <= 26; r2start++) {
+			rotor2_position = r2start;
+
+												//Rotor 3 Start Location\\
+	//***************************************************************************************************************************************\|
+		for (int r3start = 0; r3start <= 26; r3start++) {
+			rotor3_position = r3start;
+			
+			//***************** End of Rotor Start Location Permutations, continue with Mirror *****************\|                
+
+		//Mirror Permutation\\
+	//***************************************************************************************************************************************\|   
+		for (int selected_mirror = 0; selected_mirror <= 25; selected_mirror++) {//Mirrors.length()
+			//assign a mirror from the mirrors array
+			mirror = mirrorA; //Mirrors[selected_mirror];
+
+		//***************** End of Mirror Permutation, continue with Final Configuration and decryption *****************\|
+
+			//fill the plugboard "holes" with the normal letters- there should be 6 '*'s replaced
+			//fill_plugboard(); Dont need this if the plugboard is given
+			//Now we can finally attempt a decryption
+			decryption_attempt = enigma(sanatized_input);
+								
+			if (hold == 0) {
+				std::cout << decryption_attempt << std::endl;
+				hold = 1;
+			}
+				
+			//Now, using the possible words given in the keyword_array, we can check to see if any of
+			//them are substrings of the decryption_attempt
+			for (int key_word = 0; key_word <= number_of_keywords - array_index_shift; key_word++) {
+				//If the keyword is a substring...
+				if (decryption_attempt.find(keyword_array[key_word]) != std::string::npos) {
+					//Display the possible decryption to the user,
+					std::cout << "A Possible Decryption of the Message is: \n" << decryption_attempt << std::endl;
+					//If the user deems it makes sense
+					std::cout << "\n Is this an Acceptable Decryption, or Shall I Keep Trying?[y/n] ";
+					char userin_pause_or_continue = ' ';
+					std::cin >> userin_pause_or_continue;
+					if (userin_pause_or_continue == 'y' || userin_pause_or_continue == 'Y') {
+						//return this decryption to the main()
+						return decryption_attempt;
+					}
+					else {
+						//If the user deemed this match to be wrong, keep trying from where we left off
+						//***** THIS RESET MAY NOT BE NEEDED******
+						//Reset the values of the plugboard for the next decryption attempt
+						//reset_plugboard(); dont touch the plugboard
+						continue;
+					}
+					//else {
+						//continue to the next combination}
+				}
+			}
+			//Reset the values of the plugboard for the next decryption attempt
+			reset_plugboard();//dont touch the plugboard
 		}
-	}
+		// Close the Rotor Start Location Permutations                                        
+		}}}
+		// Close all of the Character Pair Permutations                           
+	}}}
 	//Close the Function
 	std::cout << "I am sorry, Dave. I am Unable to Crack this Message" << std::endl;
 	std::string failed = "failed to find a possible decryption";
 	return failed;
 }
 
-//Bombe Helper Functions\\
+											//Bombe Helper Functions\\
 //***************************************************************************************************************************************\|           
 //add the plugboard letter combo from Bombe to the array            
 char add_to_plugboard(char char_base, char char_plugboard) {
