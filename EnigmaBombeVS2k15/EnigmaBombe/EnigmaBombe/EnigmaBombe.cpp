@@ -46,22 +46,30 @@ int plug_board_location = 0;
 //Location in the Reflector.
 int reflector_base_location = 0;
 //Number of rotors
-int Number_of_Rotors = 8;
+int Number_of_Rotors = 7;
+//Number of Mirrors
+int Number_of_Mirrors = 2;
 // To check if a Letter is in the Base for Sanatization
 bool is_in_base;
 //***************************** End Helper Variables ****************************\\
     
-//Bombe Variables\\
+														//Bombe Variables\\
 //***************************************************************************************************************************************\\
-         //Test words for Decryption, must be capital words and an  array is used 
-//so that multiple words can be used if necessary
+//Test words for Decryption, must be capital words and an  array is used 
+	//so that multiple words can be used if necessary
 const int number_of_keywords = 7;
 std::string keyword_array[number_of_keywords] = { "HITLE R","HI TLER","HIT LER", "HITL ER", "H ITLER","DERFUHRER", "WETTERBERICHT" };
+
+//helper variables to store the Bombe Config prior to enigma being ran
+int preEnigmaRotor1Position = 0;
+int preEnigmaRotor2Position = 0;
+int preEnigmaRotor3Position = 0;
+
 //***************************** End Bombe Variables ****************************\\      
 
-//Einstellung\\
+															//Einstellung\\
 //***************************************************************************************************************************************\\
-        //Set the starting "base" key Ringstellung is a fixed start increase, numbers correspond to the alphabet
+//Set the starting "base" key Ringstellung is a fixed start increase, numbers correspond to the alphabet
 int rotor1_key = 0;
 int rotor2_key = 0;
 int rotor3_key = 0;
@@ -77,14 +85,17 @@ int rotor2_kick_value = 5;
 int rotor3_kick_value = 5;
 //int rotor3_double_step = 15;
 
-//This is the current position on the array, or the current circuit path as will be modified in the program.
-int rotor1_position = 0;
-int rotor2_position = 0;
-int rotor3_position = 0;
+//****************Modify these to Get the Enigma to Change its start settings******************************\|
+																											//
+//This is the current position on the array, or the current circuit path as will be modified in the program.//
+int rotor1_position = 6;																					//
+int rotor2_position = 2;																					//
+int rotor3_position = 1;																					//
+//**********************************************************************************************************\|
 
 //Where is the given start location, the start location will change as the rotor increment, the take the
 //Ringstellung into account- the Ringstellung is a fixed wiring change. The start location is the physical 
-//Rotation as 'keys' are pressed.
+//Rotation as 'keys' are pressed. This is only for Enigmas Calculations
 int rotor1_start = rotor1_key + rotor1_position;
 int rotor2_start = rotor2_key + rotor2_position;
 int rotor3_start = rotor3_key + rotor3_position;
@@ -113,6 +124,7 @@ char VII[26] = { 'N','Z','J','H','G','R','C','X','M','Y','S','W','B','O','U','F'
 char VIII[26] = { 'F','K','Q','H','T','L','X','O','C','B','J','S','P','D','Z','R','A','M','E','W','N','I','U','Y','G','V' };
 
 char Rotors[8] = { *I,*II, *III, *IV, *V, *VI, *VII, *VIII };
+std::string rotorNames[8] = { "I","II", "III", "IV", "V", "VI", "VII", "VIII" };
 
 //Choices of Reflectors, not all mirrors work properly, the source i got htem from had a few mistakes. Beta or Gamma may be bad
 char mirrorA[26] = { 'E','J','M','Z','A','L','Y','X','V','B','W','F','C','R','Q','U','O','N','T','S','P','I','K','H','G','D' };
@@ -120,6 +132,7 @@ char mirrorB[26] = { 'Y','R','U','H','Q','S','L','D','P','X','N','G','O','K','M'
 char mirrorC[26] = { 'F','V','P','J','I','A','O','Y','E','D','R','Z','X','W','G','C','T','K','U','Q','S','B','N','M','H','L' };
 
 char Mirrors[3] = { *mirrorA, *mirrorB, *mirrorC };
+std::string mirrorNames[3] = { "mirrorA", "mirrorB", "mirrorC" };
 
 //M4 Engima Rotor and Mirrors
 char beta[26] = { 'L','E','Y','J','V','C','N','I','X','W','P','B','Q','M','D','R','T','A','K','Z','G','F','U','H','O','S' };
@@ -146,6 +159,7 @@ char *rotor4 = beta;
 char add_to_plugboard(char char_base, char char_plugboard);
 void fill_plugboard();
 void reset_plugboard();
+void reset_Enigma();
 
 std::string sanatize(std::string string_in) {
 	std::string input = string_in;
@@ -488,14 +502,14 @@ std::string Bombe(std::string sanatized_input) {
 	std::cout << "Welcome to Bombe, I will begin my Attempt to Break your Message.\nWorking....." << std::endl;
 													//Rotor 1\\
 	//***************************************************************************************************************************************\|
-	for (int R1 = 0; R1 <= Number_of_Rotors; R1++) {
-		rotor1 = I; //&Rotors[R1];
+	for (int R1 = 0; R1 <= Number_of_Rotors - array_index_shift; R1++) {
+		*rotor1 = Rotors[R1];
 		std::cout << "The Current Rotor in Position 1 is: " << rotor1 << std::endl;
 													//Rotor 2\\
 	//***************************************************************************************************************************************\|
-	for (int R2 = 0; R2 <= Number_of_Rotors; R2++) {
+	for (int R2 = 0; R2 <= Number_of_Rotors - array_index_shift; R2++) {
 		if (R2 != R1) {
-			rotor2 = II;//&Rotors[R2];
+			*rotor2 = Rotors[R2];
 			std::cout << "The Current Rotor in Position 2 is: " << rotor2 << std::endl;
 		}
 		else {
@@ -503,15 +517,22 @@ std::string Bombe(std::string sanatized_input) {
 		}
 													//Rotor 3\\
 	//***************************************************************************************************************************************\|
-	for (int R3 = 0; R3 <= Number_of_Rotors; R3++) {
+	for (int R3 = 0; R3 <= Number_of_Rotors - array_index_shift; R3++) {
 		if (R3 != R1 && R3 != R2) {
-			rotor3 = III; // &Rotors[R3];
+			*rotor3 = Rotors[R3];
 			std::cout << "The Current Rotor in Position 3 is: " << rotor3 << std::endl;
 		}
 		else {
 			continue;
 		}
 				//********* End rotor Permutations, Continue with Plugboard and starting position *********\|
+
+				//Mirror Permutation\\
+		//***************************************************************************************************************************************\|   
+		for (int selected_mirror = 0; selected_mirror <= Number_of_Mirrors - array_index_shift; selected_mirror) { //Mirrors.length() = 3, therefore 2
+																												   //assign a mirror from the mirrors array
+			*mirror = Mirrors[selected_mirror];
+			//***************** End of Mirror Permutation, continue plugboard************ *****************\|
 
 		//Begin Pair Permutations
 	//***************************************************************************************************************************************\|
@@ -706,8 +727,8 @@ std::string Bombe(std::string sanatized_input) {
 
 												//Rotor 1 Start Location\\
 		//***************************************************************************************************************************************\|
-		for (int r1start = 0; r1start <= 26; r1start++) {
-			rotor1_position = r1start;
+		for (int r3start = 0; r3start <= 26; r3start++) {
+			rotor3_position = r3start;
 				
 												//Rotor 2 Start Location\\
 		//***************************************************************************************************************************************\| 
@@ -716,21 +737,13 @@ std::string Bombe(std::string sanatized_input) {
 
 												//Rotor 3 Start Location\\
 		//***************************************************************************************************************************************\|
-		for (int r3start = 0; r3start <= 26; r3start++) {
-			rotor3_position = r3start;				
-			//***************** End of Rotor Start Location Permutations, continue with Mirror *****************\|                
+		for (int r1start = 0; r1start <= 26; r1start++) {
+			rotor1_position = r1start;				
+			//***************** End of Rotor Start Location Permutations, continue with Decryption *****************\|                
 
-
-		//Mirror Permutation\\
-	//***************************************************************************************************************************************\|   
-		for (int selected_mirror = 0; selected_mirror <= 2; selected_mirror) { //Mirrors.length() = 3, therefore 2
-		   //assign a mirror from the mirrors array
-			mirror = &Mirrors[selected_mirror];
-			//***************** End of Mirror Permutation, continue with Final Configuration and decryption *****************\|
-
-					//fill the plugboard "holes" with the normal letters- there should be 6 '*' replaced
+			//fill the plugboard "holes" with the normal letters- there should be 6 '*' replaced
 			fill_plugboard();
-				//Now we can finally attempt a decryption
+			//Now we can finally attempt a decryption
 			decryption_attempt = enigma(sanatized_input);
 			std::cout << decryption_attempt << std::endl;
 			//Now, using the possible words given in the keyword_array, we can check to see if any of
@@ -776,47 +789,59 @@ std::string Bombe(std::string sanatized_input) {
 //*************************************************** End of Bombe ***********************************************************************\|
 
 //************************************************** Bome Short **************************************************************************\|
-//Essentially, bombe withought the plugboard
+//Essentially, bombe withought the plugboard, experimental to increase efficiency
 
 std::string BombeShort(std::string sanatized_input) {
 	//set the rotors to the beginning
 	std::string decryption_attempt = "";
 	//sanatize just to make sure
 	sanatized_input = sanatize(sanatized_input);
-
+	reset_Enigma();
 	//******ADD a loop to take user inputs for "keywords", add them to an array?
 
 	std::cout << "Welcome to Bombe, I will begin my Attempt to Break your Message.\nWorking....." << std::endl;
+
+		//Mirror Permutation\\
+	//***************************************************************************************************************************************\|   
+	for (int selected_mirror = 0; selected_mirror <= Number_of_Mirrors - array_index_shift; selected_mirror++) {//Mirrors.length()
+																												//assign a mirror from the mirrors array
+		*mirror = Mirrors[selected_mirror];
+
+		//***************** End of Mirror Permutation, Continue with Rotors... *****************\|
+
 													//Rotor 1\\
 	//***************************************************************************************************************************************\|
-	for (int R1 = 0; R1 <= Number_of_Rotors; R1++) {
-		rotor1 = I;//Rotors[R1];
+	for (int R1 = 0; R1 <= Number_of_Rotors - array_index_shift; R1++) {
+		*rotor1 = Rotors[R1];
+		//std::cout << R1 << std::endl;
 													//Rotor 2\\
 		//***************************************************************************************************************************************\|
-		for (int R2 = 0; R2 <= Number_of_Rotors; R2++) {
+		for (int R2 = 0; R2 <= Number_of_Rotors - array_index_shift; R2++) {
 			if (R2 != R1) {
-				rotor2 = II;//Rotors[R2];
+				*rotor2 = Rotors[R2];
+				//std::cout << R2 << std::endl;
 			}
 			else {
 				continue;
 			}
 													//Rotor 3\\
 		//***************************************************************************************************************************************\|
-		for (int R3 = 0; R3 <= Number_of_Rotors; R3++) {
+		for (int R3 = 0; R3 <= Number_of_Rotors - array_index_shift; R3++) {
 			if (R3 != R1 && R3 != R2) {
-				rotor3 = III;//Rotors[R3];
+				*rotor3 = Rotors[R3];
+				//std::cout << rotor3 << std::endl;
 			}
 			else {
 				continue;
 			}
-			//********* End rotor Permutations, Continue with Plugboard and starting position *********\|
+			//********* End rotor Permutations, Continue with Plugboard ***************************\|
 
-	//***************** No Plugboard Permutation in the Short Bombe to Make it Easier *****************\|
+	//***************** No Plugboard Permutation in the Short Bombe to Make it Easier, continue with Final Configuration and decryption *****************\|
 
 												//Rotor 1 Start Location\\
 	//***************************************************************************************************************************************\|
-		for (int r1start = 0; r1start <= 26; r1start++) {
-			rotor1_position = r1start;
+		for (int r3start = 0; r3start <= 26; r3start++) {
+			rotor3_position = r3start;
 
 												//Rotor 2 Start Location\\
 	//***************************************************************************************************************************************\| 
@@ -825,42 +850,52 @@ std::string BombeShort(std::string sanatized_input) {
 
 												//Rotor 3 Start Location\\
 	//***************************************************************************************************************************************\|
-		for (int r3start = 0; r3start <= 26; r3start++) {
-			rotor3_position = r3start;
-			
-			//***************** End of Rotor Start Location Permutations, continue with Mirror *****************\|                
-
-		//Mirror Permutation\\
-	//***************************************************************************************************************************************\|   
-		for (int selected_mirror = 0; selected_mirror <= 25; selected_mirror++) {//Mirrors.length()
-			//assign a mirror from the mirrors array
-			mirror = mirrorA; //Mirrors[selected_mirror];
-
-		//***************** End of Mirror Permutation, continue with Final Configuration and decryption *****************\|
+		for (int r1start = 0; r1start <= 26; r1start++) {
+			rotor1_position = r1start;          
 
 			//fill the plugboard "holes" with the normal letters- there should be 6 '*'s replaced
 			//fill_plugboard(); Dont need this if the plugboard is given
+
+			//Save the preDecryption Start locations
+			preEnigmaRotor1Position = rotor1_start;
+			preEnigmaRotor2Position = rotor2_start;
+			preEnigmaRotor3Position = rotor3_start;
+
 			//Now we can finally attempt a decryption
 			decryption_attempt = enigma(sanatized_input);
-								
+			
+		//**************Output the first Attempt***************\|
 			if (hold == 0) {
-				std::cout << decryption_attempt << std::endl;
+				//std::cout << decryption_attempt << std::endl;
 				hold = 1;
 			}
-				
+		//*****************************************************\|
+
+		//*********always output the attempt***********\|
+			//std::cout << decryption_attempt << std::endl;
+		//*********************************************\|
+
 			//Now, using the possible words given in the keyword_array, we can check to see if any of
 			//them are substrings of the decryption_attempt
 			for (int key_word = 0; key_word <= number_of_keywords - array_index_shift; key_word++) {
 				//If the keyword is a substring...
+				
 				if (decryption_attempt.find(keyword_array[key_word]) != std::string::npos) {
 					//Display the possible decryption to the user,
 					std::cout << "A Possible Decryption of the Message is: \n" << decryption_attempt << std::endl;
 					//If the user deems it makes sense
-					std::cout << "\n Is this an Acceptable Decryption, or Shall I Keep Trying?[y/n] ";
+					std::cout << "\nIs this an Acceptable Decryption?[y/n] ";
+					std::cout << R3 << std::endl;
 					char userin_pause_or_continue = ' ';
 					std::cin >> userin_pause_or_continue;
+					
 					if (userin_pause_or_continue == 'y' || userin_pause_or_continue == 'Y') {
+						
 						//return this decryption to the main()
+						std::cout << "Ok, The Current Configuration is: \n\tRotors: "
+							<< rotorNames[R1] << ", " << rotorNames[R2] << ", " << rotorNames[R3]
+							<< "\n\tMirror: " << mirrorNames[selected_mirror] 
+							<< "\n\tRotor Positions: " << preEnigmaRotor1Position << " " << preEnigmaRotor2Position << " " << preEnigmaRotor3Position << std::endl;
 						return decryption_attempt;
 					}
 					else {
@@ -919,6 +954,17 @@ void reset_plugboard() {
 		plug_board[i] = '*';
 	}
 }
+
+void reset_Enigma() {
+	rotor1_start = 0;
+	rotor2_start = 0;
+	rotor3_start = 0;
+	rotor1_position = 0;
+	rotor2_position = 0;
+	rotor3_position = 0;
+
+}
+
 //**************************End Bombe Helper Functions******************************\\
     
 //*****************************End String Functions*********************************\\
