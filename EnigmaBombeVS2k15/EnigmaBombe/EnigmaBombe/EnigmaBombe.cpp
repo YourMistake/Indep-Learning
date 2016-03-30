@@ -64,6 +64,7 @@ std::string keyword_array[number_of_keywords] = { "HITLE R","HI TLER","HIT LER",
 int preEnigmaRotor1Position = 0;
 int preEnigmaRotor2Position = 0;
 int preEnigmaRotor3Position = 0;
+int Number_of_Attempts = 0;
 
 //***************************** End Bombe Variables ****************************\\      
 
@@ -88,9 +89,9 @@ int rotor3_kick_value = 5;
 //****************Modify these to Get the Enigma to Change its start settings******************************\|
 																											//
 //This is the current position on the array, or the current circuit path as will be modified in the program.//
-int rotor1_position = 6;																					//
+int rotor1_position = 4;																					//
 int rotor2_position = 2;																					//
-int rotor3_position = 1;																					//
+int rotor3_position = 0;																					//
 //**********************************************************************************************************\|
 
 //Where is the given start location, the start location will change as the rotor increment, the take the
@@ -813,13 +814,13 @@ std::string BombeShort(std::string sanatized_input) {
 	//***************************************************************************************************************************************\|
 	for (int R1 = 0; R1 <= Number_of_Rotors - array_index_shift; R1++) {
 		*rotor1 = Rotors[R1];
-		//std::cout << R1 << std::endl;
+		
 													//Rotor 2\\
 		//***************************************************************************************************************************************\|
 		for (int R2 = 0; R2 <= Number_of_Rotors - array_index_shift; R2++) {
 			if (R2 != R1) {
 				*rotor2 = Rotors[R2];
-				//std::cout << R2 << std::endl;
+				
 			}
 			else {
 				continue;
@@ -829,7 +830,7 @@ std::string BombeShort(std::string sanatized_input) {
 		for (int R3 = 0; R3 <= Number_of_Rotors - array_index_shift; R3++) {
 			if (R3 != R1 && R3 != R2) {
 				*rotor3 = Rotors[R3];
-				//std::cout << rotor3 << std::endl;
+				
 			}
 			else {
 				continue;
@@ -841,17 +842,17 @@ std::string BombeShort(std::string sanatized_input) {
 												//Rotor 1 Start Location\\
 	//***************************************************************************************************************************************\|
 		for (int r3start = 0; r3start <= 26; r3start++) {
-			rotor3_position = r3start;
+			//rotor3_position = r3start;
 
 												//Rotor 2 Start Location\\
 	//***************************************************************************************************************************************\| 
 		for (int r2start = 0; r2start <= 26; r2start++) {
-			rotor2_position = r2start;
+			//rotor2_position = r2start;
 
 												//Rotor 3 Start Location\\
 	//***************************************************************************************************************************************\|
 		for (int r1start = 0; r1start <= 26; r1start++) {
-			rotor1_position = r1start;          
+			//rotor1_position = r1start;          
 
 			//fill the plugboard "holes" with the normal letters- there should be 6 '*'s replaced
 			//fill_plugboard(); Dont need this if the plugboard is given
@@ -860,7 +861,9 @@ std::string BombeShort(std::string sanatized_input) {
 			preEnigmaRotor1Position = rotor1_start;
 			preEnigmaRotor2Position = rotor2_start;
 			preEnigmaRotor3Position = rotor3_start;
-
+			rotor1_position = r1start;
+			rotor2_position = r2start;
+			rotor3_position = r3start;
 			//Now we can finally attempt a decryption
 			decryption_attempt = enigma(sanatized_input);
 			
@@ -872,7 +875,8 @@ std::string BombeShort(std::string sanatized_input) {
 		//*****************************************************\|
 
 		//*********always output the attempt***********\|
-			//std::cout << decryption_attempt << std::endl;
+			std::cout << decryption_attempt << std::endl;
+			Number_of_Attempts += 1;
 		//*********************************************\|
 
 			//Now, using the possible words given in the keyword_array, we can check to see if any of
@@ -885,7 +889,7 @@ std::string BombeShort(std::string sanatized_input) {
 					std::cout << "A Possible Decryption of the Message is: \n" << decryption_attempt << std::endl;
 					//If the user deems it makes sense
 					std::cout << "\nIs this an Acceptable Decryption?[y/n] ";
-					std::cout << R3 << std::endl;
+					
 					char userin_pause_or_continue = ' ';
 					std::cin >> userin_pause_or_continue;
 					
@@ -896,6 +900,7 @@ std::string BombeShort(std::string sanatized_input) {
 							<< rotorNames[R1] << ", " << rotorNames[R2] << ", " << rotorNames[R3]
 							<< "\n\tMirror: " << mirrorNames[selected_mirror] 
 							<< "\n\tRotor Positions: " << preEnigmaRotor1Position << " " << preEnigmaRotor2Position << " " << preEnigmaRotor3Position << std::endl;
+							//<< "\n\tIt took " << Number_of_Attempts << " Attempts" << std::endl;
 						return decryption_attempt;
 					}
 					else {
@@ -956,12 +961,13 @@ void reset_plugboard() {
 }
 
 void reset_Enigma() {
-	rotor1_start = 0;
-	rotor2_start = 0;
-	rotor3_start = 0;
 	rotor1_position = 0;
 	rotor2_position = 0;
 	rotor3_position = 0;
+	rotor1_start = rotor1_position + rotor1_key;
+	rotor2_start = rotor2_position + rotor2_key;
+	rotor3_start = rotor3_position + rotor3_key;
+	
 
 }
 
@@ -1107,55 +1113,100 @@ int main() {
 
 				//Settings Case DOES NOT WORK, under CONSTRUCTION :-) 
 		case 5: {
-			std::cout << "Welcome to the settings!" << std::endl;
-			std::cout << "Would you like to:" << std::endl <<
-				"[1] Set the Rotors" << std::endl <<
-				"[2] Set the Rotor Starting Position?" << std::endl <<
-				"[3] Set the Rotor Kick Values?" << std::endl <<
-				"[4] Set mirror?" << std::endl <<
-				"[2] Set the Switch Board Settings?" << std::endl <<
-
-				"[7] Go Back" << std::endl;
+			std::cout << "\tWelcome to the settings!" << std::endl;
 			do {
+				std::cout << "\tWould you like to:" << std::endl <<
+					"\t[1] Set the Rotors Starting Position" << std::endl <<
+					"\t[2] Set the Plugboard" << std::endl <<
+					"\t[3] Set the Rotor Kick Values?" << std::endl <<
+					"\t[4] Set the Rotor Offset(Ringstellung) by Number" << std::endl <<
+					"\t[5] Set mirror?" << std::endl <<
+					"\t[6] Set the Rotors?" << std::endl <<
+					"\t[7] Go Back\t" << std::endl;
 				std::cin >> settings_option;
 
 				switch (settings_option) { //Detects the option
 				case 1: {
-					std::cout << "Set Rotor 1's Start: " << std::endl;
+					std::cout << "\tSet Rotor 1's Start: ";
 					std::cin >> rotor1_start;
+					rotor1_start += rotor1_key;
 
-					std::cout << "Set Rotor 2's Start: " << std::endl;
-					std::cin >> rotor2_start;
+					std::cout << "\tSet Rotor 2's Start: ";
+					std::cin >> rotor2_position;
+					rotor2_start += rotor2_key;
 
-					std::cout << "Set Rotor 3's Start: " << std::endl;
-					std::cin >> rotor3_start;
+					std::cout << "\tSet Rotor 3's Start: ";
+					std::cin >> rotor3_position;
+					rotor3_start += rotor3_key;
+
+					std::cout << "\n";
 					break;
 				}
 				case 2: {
-					std::cout << "Please enter 26, non-repeating, capital letters: " << std::endl;
+					std::cout << "\tPlease enter 26, non-repeating, capital letters: ";
 					std::string plug_board_chars;
 					std::cin >> plug_board_chars;
 					for (int i = 0; i <= 25; i++) {
 						Enc_Dec_plug_board[i] = plug_board_chars[i];
 					}
 					break;
+					std::cout << "\n";
 				}
 				case 3: {
-					std::cout << "When will Rotor 1 increment?" << std::endl;
+					std::cout << "\tWhen will Rotor 1 increment?";
 					std::cin >> rotor1_kick_value;
-					std::cout << "When will Rotor 2 increment?" << std::endl;
+					std::cout << "\tWhen will Rotor 2 increment?";
 					std::cin >> rotor2_kick_value;
-					std::cout << "When will Rotor 3 increment?" << std::endl;
+					std::cout << "\tWhen will Rotor 3 increment?";
 					std::cin >> rotor3_kick_value;
+					std::cout << "\n";
 					break;
 				}
+				case 4: {
+					std::cout << "\tWhat is Rotor 1's Offset?";
+					std::cin >> rotor1_kick_value;
+					std::cout << "\tWhat is Rotor 2's Offset?";
+					std::cin >> rotor2_kick_value;
+					std::cout << "\tWhat is Rotor 3's Offset?";
+					std::cin >> rotor3_kick_value;
+					std::cout << "\n";
+					break;
+				}
+				case 5: {
+					std::cout << "\tWhat is the Mirror?(does not function)";
+					std::cin >> mirror;
+					std::cout << "\n";
+					break;
+				}
+				case 6: {
+					std::cout << "\tWhat is Rotor 1?(Does not Function)";
+					std::cin >> rotor1;
+					std::cout << "\tWhat is Rotor 2?(Does not Function)";
+					std::cin >> rotor2;
+					std::cout << "\tWhat is Rotor 3?(Does not Function)";
+					std::cin >> rotor3;
+					std::cout << "\n";
+					break;
+				}
+				case 7: {
+					std::cout << "\tReturning to the Main Menu" << std::endl;
+					std::cout << std::endl << "[1] Verschlusselung oder Entschlusselung(Encrypt/Decrypt from input)"
+						<< std::endl << "[2] Verschlusselung von text(Encrypt/Decrypt From a File)"
+						<< std::endl << "[3] Bombe, Crack an Enigma Message From Text"
+						<< std::endl << "[4] Bombe, Crack an Enigma Message From a File"
+						<< std::endl << "[5] Einstellungen(Settings)"
+						<< std::endl << "[6] Ausgang" << std::endl;
+					break;
+				}
+
 				default: {
 					std::cout << "Invalid Option!";
-					system("PAUSE");
+					//system("PAUSE");
 					break;
 				}
 				}
 			} while (settings_option != 7);
+			continue;
 		}
 
 		case 6: {
@@ -1169,7 +1220,7 @@ int main() {
 		}
 		}
 
-	} while (option != 4);
+	} while (option != 6);
 
 	system("PAUSE");
 	return 0;
